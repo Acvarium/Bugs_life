@@ -8,4 +8,4 @@ This work is based on "Coding Challenge #69.4: Evolutionary Steering Behaviors" 
 
 ## Powered by Godot engine
 
-![scr2017-04-23-23 43 21](https://cloud.githubusercontent.com/assets/463177/25317291/b4c0a870-287e-11e7-8a43-80aa315b8a53.png)
+![scr2017-04-23-23 47 36](https://cloud.githubusercontent.com/assets/463177/25317310/4008b45e-287f-11e7-8448-b2907c2fbba9.png)
