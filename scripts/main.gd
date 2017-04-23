@@ -177,8 +177,6 @@ func _on_debug_hint_pressed():
 	debug_vision = get_node("GUILayer/menu/debug_hint").is_pressed()
 	if debug_vision:
 		get_node("GUILayer/deltaSS").show()
-		get_node("GUILayer/timeSS").show()
 	else:
 		get_node("GUILayer/deltaSS").hide()
-		get_node("GUILayer/timeSS").hide()
 			
