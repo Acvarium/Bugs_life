@@ -14,12 +14,14 @@ var debug_vision = false
 const MAX_DELTA = 0.05
 var max_food_count = 100
 var game_time = 0
+var show_menu = false
 
 func _ready():
 	randomize()
 	set_process(true)
 	set_fixed_process(true)
 	set_process_input(true)
+
 	var screen_resolution = get_viewport().get_rect().size
 	get_node("camera").set_pos(Vector2(screen_resolution.x/2,screen_resolution.y/2))
 	for i in range(150):
@@ -41,7 +43,7 @@ func _ready():
 		add_vehicle(dna)
 
 func _process(delta):
-	get_node("CanvasLayer/deltaSS").set_text(str(1/delta) + '     ' + str(delta) )
+	get_node("GUILayer/deltaSS").set_text(str(1/delta) + '     ' + str(delta) )
 	if delta > MAX_DELTA:
 		var v = get_node("vihicles").get_child_count()
 		if v > 2:
@@ -58,7 +60,7 @@ func _fixed_process(delta):
 	var hours = int(game_time / 3600)
 	var minutes = int((game_time - (hours * 3600)) / 60)
 	var sec = int(game_time - (minutes * 60) - (hours * 3600))
-	get_node("CanvasLayer/timeSS").set_text(str("%02d" % hours) + ":" + str("%02d" % minutes) + ":" + str("%02d" % sec))
+	get_node("GUILayer/timeSS").set_text(str("%02d" % hours) + ":" + str("%02d" % minutes) + ":" + str("%02d" % sec))
 	
 #	get_node("CanvasLayer/timeSS").set_text(str("%3.2f" % game_time))
 	var mouse_pos = get_local_mouse_pos()
@@ -67,10 +69,6 @@ func _fixed_process(delta):
 #
 
 func _input(event):
-	if event.is_action_pressed("togle_debug_vision"):
-
-		debug_vision = !debug_vision
-
 	if event.is_action_pressed("LMB"):
 		add_piece_of_food(get_local_mouse_pos(), randi()%10 + 1)
 
@@ -159,5 +157,26 @@ func _eated_mess(f_name, v_name):
 		add_piece_of_food(rand_pos, h)
 	
 
-func _on_Button_pressed():
+func _on_reset_pressed():
 	get_tree().reload_current_scene()
+
+
+func _on_TextureButton_pressed():
+	if !show_menu:
+		get_node("GUILayer/menu_anim").play("menu_appear")
+		show_menu = !show_menu
+
+	else:
+		get_node("GUILayer/menu_anim").play_backwards("menu_appear")
+		show_menu = !show_menu
+
+
+func _on_debug_hint_pressed():
+	debug_vision = get_node("GUILayer/menu/debug_hint").is_pressed()
+	if debug_vision:
+		get_node("GUILayer/deltaSS").show()
+		get_node("GUILayer/timeSS").show()
+	else:
+		get_node("GUILayer/deltaSS").hide()
+		get_node("GUILayer/timeSS").hide()
+			
