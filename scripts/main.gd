@@ -14,6 +14,7 @@ var debug_vision = false
 const MAX_DELTA = 0.05
 var max_food_count = 100
 var game_time = 0
+var food_to_poison = 3
 var show_menu = false
 
 func _ready():
@@ -21,20 +22,21 @@ func _ready():
 	set_process(true)
 	set_fixed_process(true)
 	set_process_input(true)
-
 	var screen_resolution = get_viewport().get_rect().size
+	max_food_count = (screen_resolution.x * screen_resolution.y / 8000)
 	get_node("camera").set_pos(Vector2(screen_resolution.x/2,screen_resolution.y/2))
-	for i in range(150):
+	var max_f = max_food_count / (food_to_poison + 1) * food_to_poison
+	for i in range(max_f):
 		var rand_pos = Vector2(randf() * screen_resolution.x,randf() * screen_resolution.y)
 		var h = randi()%10 + 1
 		add_piece_of_food(rand_pos, h)
 
-	for i in range(50):
+	for i in range(food_to_poison - max_f):
 		var rand_pos = Vector2(randf() * screen_resolution.x,randf() * screen_resolution.y)
 		var h = poison_energy #randi()%2 * 10 - 5
 		add_piece_of_food(rand_pos, h)
 
-	for i in range(100):
+	for i in range(screen_resolution.x * screen_resolution.y / 16000):
 		var dna = []
 		dna.append(randi()%10 - 5) 	#Притягування до їжі
 		dna.append(randi()%10 - 5)	#Притягування до яду
@@ -60,7 +62,7 @@ func _fixed_process(delta):
 	var hours = int(game_time / 3600)
 	var minutes = int((game_time - (hours * 3600)) / 60)
 	var sec = int(game_time - (minutes * 60) - (hours * 3600))
-	get_node("GUILayer/timeSS").set_text(str("%02d" % hours) + ":" + str("%02d" % minutes) + ":" + str("%02d" % sec))
+	get_node("CanvasLayer/timeSS").set_text(str("%02d" % hours) + ":" + str("%02d" % minutes) + ":" + str("%02d" % sec))
 	
 #	get_node("CanvasLayer/timeSS").set_text(str("%3.2f" % game_time))
 	var mouse_pos = get_local_mouse_pos()
@@ -151,7 +153,7 @@ func _eated_mess(f_name, v_name):
 	var screen_resolution = get_viewport().get_rect().size
 	var rand_pos = Vector2(randf() * screen_resolution.x,randf() * screen_resolution.y)
 	var h = randi()%10 + 1
-	if food_list.size()/4 > poison_list.size():
+	if (food_list.size() / food_to_poison) > poison_list.size():
 		h = poison_energy
 	if food_list.size() + poison_list.size() < max_food_count:
 		add_piece_of_food(rand_pos, h)
