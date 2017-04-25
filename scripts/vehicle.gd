@@ -15,6 +15,8 @@ var for_reproduction = 150
 var dna = [3,-1,300, 50]
 var main_node
 var debug_vision = false
+var benchmark_mode = false
+
 signal mult(dna)
 
 var appearance = [
@@ -42,6 +44,8 @@ Color(0.5, 1, 0.7),					#Ізумрудний				11
 
 func _ready():
 	randomize()
+	benchmark_mode = get_node("/root/global").benchmark_mode
+	
 	main_node = get_tree().get_root().get_node("main")
 	debug_vision = main_node.debug_vision
 	self.connect('mult',main_node, "_multiply")
@@ -66,12 +70,12 @@ func _fixed_process(delta):
 		debug_vision = main_node.debug_vision
 		update()
 	if time_of_death:
-#		var c = COLORS[dna[1]]
-#		var death_color = 1 - (lifetime - time_of_death) / decomposition_time
-#		c.r *= death_color
-#		c.g *= death_color
-#		c.b *= death_color
-#		get_node("Sprite").set_modulate(c)
+		var c = COLORS[dna[1]]
+		var death_color = 1 - (lifetime - time_of_death) / decomposition_time
+		c.r *= death_color
+		c.g *= death_color
+		c.b *= death_color
+		get_node("Sprite").set_modulate(c)
 		if lifetime - time_of_death > decomposition_time:
 			queue_free()
 		get_node("h_rot/health/lifetimeSS").set_text(str("%4.2f" % time_of_death))
@@ -134,6 +138,7 @@ func get_health():
 
 func set_health(h):
 	health = h
+
 #	max_speed = (1 - (lifetime/max_lifetime)) * MAX_SPEED
 #	max_force = (1 - (lifetime/max_lifetime)) * MAX_FORCE
 	if health > for_reproduction:
@@ -145,14 +150,19 @@ func set_health(h):
 #		get_node("CollisionShape2D").set_trigger(true)
 		health = 0
 		max_speed = 0
+		
 	var c = COLORS[dna[1]]
 #	var death_color = 1 - (lifetime - time_of_death) / decomposition_time
 	var death_color = (health / for_reproduction)
 	c.r *= death_color
 	c.g *= death_color
 	c.b *= death_color
+	
 
-	get_node("Sprite").set_modulate(c)
+	if benchmark_mode:
+		health = 130
+	else:
+		get_node("Sprite").set_modulate(c)
 #	get_node("glow").set_modulate(Color(1, 1, 1,health / 150))
 	get_node("h_rot/health/healthSS").set_text(str("%4.1f" %  health))
 	

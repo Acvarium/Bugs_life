@@ -4,11 +4,11 @@
 [ext_resource path="res://textures/UI/menu_button.png" type="Texture" id=2]
 [ext_resource path="res://textures/UI/menu_bg.png" type="Texture" id=3]
 [ext_resource path="res://textures/UI/restart_button.png" type="Texture" id=4]
-[ext_resource path="res://textures/UI/menu_button_arrow_left.png" type="Texture" id=5]
-[ext_resource path="res://textures/UI/menu_button_arrow_right.png" type="Texture" id=6]
-[ext_resource path="res://fonts/f01.fnt" type="BitmapFont" id=7]
-[ext_resource path="res://textures/v.png" type="Texture" id=8]
-[ext_resource path="res://objects/vehicle.tscn" type="PackedScene" id=9]
+[ext_resource path="res://textures/UI/benchmark_button.png" type="Texture" id=5]
+[ext_resource path="res://textures/UI/menu_button_arrow_left.png" type="Texture" id=6]
+[ext_resource path="res://textures/UI/menu_button_arrow_right.png" type="Texture" id=7]
+[ext_resource path="res://fonts/f01.fnt" type="BitmapFont" id=8]
+[ext_resource path="res://textures/v.png" type="Texture" id=9]
 [ext_resource path="res://textures/target.png" type="Texture" id=10]
 
 [sub_resource type="Animation" id=1]
@@ -105,8 +105,25 @@ percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
 
+[node name="bugsSS" type="Label" parent="GUILayer"]
+
+visibility/visible = false
+focus/ignore_mouse = true
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 0
+margin/left = 2.0
+margin/top = 32.0
+margin/right = 42.0
+margin/bottom = 46.0
+text = "Bugs ="
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+
 [node name="menu" type="TextureButton" parent="GUILayer"]
 
+editor/display_folded = true
 anchor/left = 1
 anchor/right = 1
 focus/ignore_mouse = false
@@ -154,16 +171,33 @@ textures/normal = ExtResource( 4 )
 params/resize_mode = 0
 params/stretch_mode = 0
 
+[node name="benchmark" type="TextureButton" parent="GUILayer/menu"]
+
+focus/ignore_mouse = false
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 2
+margin/left = 107.0
+margin/top = 311.0
+margin/right = 352.0
+margin/bottom = 373.0
+toggle_mode = false
+enabled_focus_mode = 2
+shortcut = null
+textures/normal = ExtResource( 5 )
+params/resize_mode = 0
+params/stretch_mode = 0
+
 [node name="arrow_left" type="Sprite" parent="GUILayer/menu"]
 
 transform/pos = Vector2( 32, 32 )
-texture = ExtResource( 5 )
+texture = ExtResource( 6 )
 
 [node name="arrow_right" type="Sprite" parent="GUILayer/menu"]
 
 visibility/visible = false
 transform/pos = Vector2( 32, 32 )
-texture = ExtResource( 6 )
+texture = ExtResource( 7 )
 
 [node name="debug_hint" type="CheckBox" parent="GUILayer/menu"]
 
@@ -176,7 +210,7 @@ margin/left = 117.0
 margin/top = 74.0
 margin/right = 229.0
 margin/bottom = 101.0
-custom_fonts/font = ExtResource( 7 )
+custom_fonts/font = ExtResource( 8 )
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 toggle_mode = true
 enabled_focus_mode = 2
@@ -214,6 +248,7 @@ autoplay = ""
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
+editor/display_folded = true
 layer = -1
 offset = Vector2( 0, 0 )
 rotation = 0.0
@@ -232,7 +267,7 @@ margin/left = 0.0
 margin/top = 0.0
 margin/right = -3.0
 margin/bottom = -3.0
-texture = ExtResource( 8 )
+texture = ExtResource( 9 )
 expand = true
 stretch_mode = 0
 __meta__ = {
@@ -255,10 +290,6 @@ lines_skipped = 0
 max_lines_visible = -1
 
 [node name="vihicles" type="Node2D" parent="."]
-
-[node name="vehicle" parent="vihicles" instance=ExtResource( 9 )]
-
-transform/pos = Vector2( 388.847, 304.811 )
 
 [node name="food_container" type="Node2D" parent="."]
 
@@ -327,6 +358,8 @@ drag_margin/bottom = 0.0
 [connection signal="pressed" from="GUILayer/menu" to="." method="_on_TextureButton_pressed"]
 
 [connection signal="pressed" from="GUILayer/menu/restart" to="." method="_on_reset_pressed"]
+
+[connection signal="pressed" from="GUILayer/menu/benchmark" to="." method="_on_benchmark_pressed"]
 
 [connection signal="pressed" from="GUILayer/menu/debug_hint" to="." method="_on_debug_hint_pressed"]
 
